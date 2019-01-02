@@ -154,7 +154,9 @@ KUBE_ADMISSION_CONTROL="--admission-control=ServiceAccount,NamespaceLifecycle,Na
 ## Add your own!
 KUBE_API_ARGS="--authorization-mode=RBAC --runtime-config=rbac.authorization.k8s.io/v1beta1 --kubelet-https=true --experimental-bootstrap-token-auth --token-auth-file=/etc/kubernetes/token.csv --service-node-port-range=30000-32767 --tls-cert-file=/etc/kubernetes/ssl/kubernetes.pem --tls-private-key-file=/etc/kubernetes/ssl/kubernetes-key.pem --client-ca-file=/etc/kubernetes/ssl/ca.pem --service-account-key-file=/etc/kubernetes/ssl/ca-key.pem --etcd-cafile=/etc/kubernetes/ssl/ca.pem --etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem --etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem --enable-swagger-ui=true --apiserver-count=3 --audit-log-maxage=30 --audit-log-maxbackup=3 --audit-log-maxsize=100 --audit-log-path=/var/lib/audit.log --event-ttl=1h"
 ```
-
++ `172.20.0.113` 为作者自己的IP，请使用者根据自己的实际情况更换IP 如127.0.0.1。
++ `KUBE_ETCD_SERVERS` 为etcd 服务所在的监听IP，如果是单机的ectd只需要添加一个IP即可，同时需要注意http/https的区分。
++ `KUBE_API_ARGS` 中的 `kubelet-https=true` 可以根据实际情况修改为 `kubelet-https=false` 如果修改为false则后面的参数都可以去掉。
 + `--experimental-bootstrap-token-auth` Bootstrap Token Authentication在1.9版本已经变成了正式feature，参数名称改为`--enable-bootstrap-token-auth`
 + 如果中途修改过`--service-cluster-ip-range`地址，则必须将default命名空间的`kubernetes`的service给删除，使用命令：`kubectl delete service kubernetes`，然后系统会自动用新的ip重建这个service，不然apiserver的log有报错`the cluster IP x.x.x.x for service kubernetes/default is not within the service CIDR x.x.x.x/16; please recreate`
 + `--authorization-mode=RBAC` 指定在安全端口使用 RBAC 授权模式，拒绝未通过授权的请求；
